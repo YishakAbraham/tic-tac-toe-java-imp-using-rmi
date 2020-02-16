@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.layout.Controller">
+   <children>
+      <Button fx:id="serverButton" layoutX="496.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleServerButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Start Game" textFill="WHITE">
+         <font>
+            <Font name="Fira Code Bold" size="18.0" />
+         </font></Button>
+      <Button fx:id="clientButton" layoutX="496.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleClientButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Join Game" textFill="WHITE">
+         <font>
+            <Font name="Fira Code Bold" size="18.0" />
+         </font></Button>
+      <TextField fx:id="textField" alignment="TOP_LEFT" layoutX="496.0" layoutY="124.0" prefHeight="29.0" prefWidth="149.0" text="rmi://localhost:1234/LocalServer" />
+      <Label layoutX="496.0" layoutY="97.0" text="Enter IP:" />
+      <Label fx:id="endGame" layoutX="496.0" layoutY="212.0" text="End Game" />
+      <Label fx:id="whoWin" layoutX="496.0" layoutY="237.0" text="You LOST!">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
