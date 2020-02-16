@@ -25,11 +25,15 @@ public class Controller {
     @FXML
     private Button clientButton;
     @FXML
+    private Button restartButton;
+    @FXML
     private AnchorPane panel;
     @FXML
     private Label endGame;
     @FXML
     private Label whoWin;
+    @FXML
+    private Label connectionStatus;
 
     private List<Rectangle> rectangles = new ArrayList<>(9);
     private List<Cell> cellList = new ArrayList<>(9);
@@ -46,6 +50,8 @@ public class Controller {
         createTable();
         endGame.setVisible(false);
         whoWin.setVisible(false);
+        connectionStatus.setVisible(false);
+        restartButton.setVisible(false);
 
         for (Rectangle rectangle : rectangles) {
             rectangle.setOnMouseClicked(event -> {
@@ -66,6 +72,7 @@ public class Controller {
                     endGame.setVisible(true);
                     whoWin.setVisible(true);
                     whoWin.setText("You WON!");
+                    restartButton.setVisible(true);
                     for (Rectangle rect : rectangles) {
                         rect.setDisable(true);
                     }
@@ -73,6 +80,7 @@ public class Controller {
                     endGame.setVisible(true);
                     whoWin.setVisible(true);
                     whoWin.setText("You WON!");
+                    restartButton.setVisible(true);
                     for (Rectangle rect : rectangles) {
                         rect.setDisable(true);
                     }
@@ -90,6 +98,12 @@ public class Controller {
             textField.setDisable(true);
             yourTurn = true;
             server.setGuiCellListener(event -> {
+                if(event.getStatus() == 0){ // restart initaited
+                    rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
+                    rectangles.get(event.getIndex()).setDisable(false);
+                    cellList.get(event.getIndex()).setStatus(event.getStatus());
+                    return;
+                }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgX));
                 rectangles.get(event.getIndex()).setDisable(true);
                 cellList.get(event.getIndex()).setStatus(event.getStatus());
@@ -108,6 +122,27 @@ public class Controller {
     }
 
     @FXML
+    private void HandlerestartButton(){
+        restartButton.setVisible(false);
+        if(server != null){
+            for(int i = 0; i < 9; i++){
+                rectangles.get(i).setFill(Color.web("#34495E"));
+                cellList.get(i).setStatus(0);
+                rectangles.get(i).setDisable(false);
+                server.sendToClient(0, i);
+            }
+        }
+        if (client != null){
+            for(int i = 0; i < 9; i++){
+                rectangles.get(i).setFill(Color.web("#34495E"));
+                rectangles.get(i).setDisable(false);
+                cellList.get(i).setStatus(0);
+                client.sendToServer(0, i);
+            }
+
+        }
+    }
+    @FXML
     private void handleClientButton() {
         try {
             client = new TicTacToeClient(textField);
@@ -116,6 +151,12 @@ public class Controller {
             textField.setDisable(true);
             yourTurn = false;
             client.setGuiCellListener(event -> {
+                if(event.getStatus() == 0){ // restart initaited
+                    rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
+                    rectangles.get(event.getIndex()).setDisable(false);
+                    cellList.get(event.getIndex()).setStatus(event.getStatus());
+                    return;
+                }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgO));
                 rectangles.get(event.getIndex()).setDisable(true);
                 cellList.get(event.getIndex()).setStatus(event.getStatus());
@@ -128,6 +169,7 @@ public class Controller {
                     whoWin.setVisible(true);
                 }
             });
+            connectionStatus.setVisible(true);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -197,4 +239,10 @@ public class Controller {
         });
         return 0;
     }
+
+    /*/private void reset(){
+        for(int i=0; i < rectangles.size(); i ++){
+
+        }
+    }*/
 }

@@ -22,5 +22,11 @@
             <Font size="25.0" />
          </font>
       </Label>
+      <Button fx:id="restartButton" layoutX="512.0" layoutY="286.0" mnemonicParsing="false" onAction="#HandlerestartButton" prefHeight="35.0" prefWidth="83.0" style="-fx-background-color: #26AF5F;" text="Restart" textFill="WHITE">
+         <font>
+            <Font name="Fira Code Regular" size="12.0" />
+         </font>
+      </Button>
+      <Label fx:id="connectionStatus" layoutX="594.0" layoutY="463.0" style="-fx-background-color: #26AF5F;" text="Connected" textFill="WHITE" />
    </children>
 </AnchorPane>
