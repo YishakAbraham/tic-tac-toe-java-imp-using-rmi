@@ -104,12 +104,8 @@ public class Controller {
             textField.setDisable(true);
             yourTurn = true;
             server.setGuiCellListener(event -> {
-                if(event.getStatus() == 0){ // restart initaited
-                    rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
-                    rectangles.get(event.getIndex()).setDisable(false);
-                    cellList.get(event.getIndex()).setStatus(event.getStatus());
-                    endGame.setVisible(false);
-                    whoWin.setVisible(false);
+                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initaited
+                    reset();
                     return;
                 }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgX));
@@ -138,12 +134,8 @@ public class Controller {
             textField.setDisable(true);
             yourTurn = false;
             client.setGuiCellListener(event -> {
-                if(event.getStatus() == 0){ // restart initaited
-                    rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
-                    rectangles.get(event.getIndex()).setDisable(false);
-                    cellList.get(event.getIndex()).setStatus(event.getStatus());
-                    endGame.setVisible(false);
-                    whoWin.setVisible(false);
+                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initaited
+                    reset();
                     return;
                 }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgO));
@@ -233,25 +225,23 @@ public class Controller {
     @FXML
     private void handleRestartButton(){
         restartButton.setVisible(false);
-        endGame.setVisible(false);
-        whoWin.setVisible(false);
         whoWin.setText("You LOST!");
         if(server != null ){
-            for(int i = 0; i < 9; i++){
-                rectangles.get(i).setFill(Color.web("#34495E"));
-                cellList.get(i).setStatus(0);
-                rectangles.get(i).setDisable(false);
-                server.sendToClient(0, i);
-            }
+           server.sendToClient(0, -1);
         }
         if (client != null){
-            for(int i = 0; i < 9; i++){
-                rectangles.get(i).setFill(Color.web("#34495E"));
-                rectangles.get(i).setDisable(false);
-                cellList.get(i).setStatus(0);
-                client.sendToServer(0, i);
-            }
-
+            reset();
+            client.sendToServer(0, -1);
+        }
+        reset();
+    }
+    private void reset(){
+        endGame.setVisible(false);
+        whoWin.setVisible(false);
+        for(int i = 0; i < 9; i++) {
+            rectangles.get(i).setFill(Color.web("#34495E"));
+            rectangles.get(i).setDisable(false);
+            cellList.get(i).setStatus(0);
         }
     }
 }
