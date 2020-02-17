@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -51,6 +52,8 @@ public class Controller {
         endGame.setVisible(false);
         whoWin.setVisible(false);
         connectionStatus.setVisible(false);
+        Image restartImg = new Image("/tic_tac_toe/assets/reset-icon.png");
+        restartButton.setGraphic(new ImageView(restartImg));
         restartButton.setVisible(false);
 
         for (Rectangle rectangle : rectangles) {
@@ -67,6 +70,9 @@ public class Controller {
                     rectangle.setDisable(true);
                     server.sendToClient(2, rectangles.indexOf(rectangle));
                     yourTurn = false;
+                }
+                if (whoWin.getText().toString().equals("DRAW!")){
+                    restartButton.setVisible(true);
                 }
                 if (checkForEndGame(1) == 1) {
                     endGame.setVisible(true);
@@ -102,6 +108,8 @@ public class Controller {
                     rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
                     rectangles.get(event.getIndex()).setDisable(false);
                     cellList.get(event.getIndex()).setStatus(event.getStatus());
+                    endGame.setVisible(false);
+                    whoWin.setVisible(false);
                     return;
                 }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgX));
@@ -122,27 +130,6 @@ public class Controller {
     }
 
     @FXML
-    private void HandlerestartButton(){
-        restartButton.setVisible(false);
-        if(server != null){
-            for(int i = 0; i < 9; i++){
-                rectangles.get(i).setFill(Color.web("#34495E"));
-                cellList.get(i).setStatus(0);
-                rectangles.get(i).setDisable(false);
-                server.sendToClient(0, i);
-            }
-        }
-        if (client != null){
-            for(int i = 0; i < 9; i++){
-                rectangles.get(i).setFill(Color.web("#34495E"));
-                rectangles.get(i).setDisable(false);
-                cellList.get(i).setStatus(0);
-                client.sendToServer(0, i);
-            }
-
-        }
-    }
-    @FXML
     private void handleClientButton() {
         try {
             client = new TicTacToeClient(textField);
@@ -155,6 +142,8 @@ public class Controller {
                     rectangles.get(event.getIndex()).setFill(Color.web("#34495E")); //#34495E
                     rectangles.get(event.getIndex()).setDisable(false);
                     cellList.get(event.getIndex()).setStatus(event.getStatus());
+                    endGame.setVisible(false);
+                    whoWin.setVisible(false);
                     return;
                 }
                 rectangles.get(event.getIndex()).setFill(new ImagePattern(imgO));
@@ -240,9 +229,29 @@ public class Controller {
         return 0;
     }
 
-    /*/private void reset(){
-        for(int i=0; i < rectangles.size(); i ++){
+
+    @FXML
+    private void handleRestartButton(){
+        restartButton.setVisible(false);
+        endGame.setVisible(false);
+        whoWin.setVisible(false);
+        whoWin.setText("You LOST!");
+        if(server != null ){
+            for(int i = 0; i < 9; i++){
+                rectangles.get(i).setFill(Color.web("#34495E"));
+                cellList.get(i).setStatus(0);
+                rectangles.get(i).setDisable(false);
+                server.sendToClient(0, i);
+            }
+        }
+        if (client != null){
+            for(int i = 0; i < 9; i++){
+                rectangles.get(i).setFill(Color.web("#34495E"));
+                rectangles.get(i).setDisable(false);
+                cellList.get(i).setStatus(0);
+                client.sendToServer(0, i);
+            }
 
         }
-    }*/
+    }
 }

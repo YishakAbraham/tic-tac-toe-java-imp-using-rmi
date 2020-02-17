@@ -1,32 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.layout.Controller">
-   <children>
-      <Button fx:id="serverButton" layoutX="496.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleServerButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Start Game" textFill="WHITE">
-         <font>
-            <Font name="Fira Code Bold" size="18.0" />
-         </font></Button>
-      <Button fx:id="clientButton" layoutX="496.0" layoutY="55.0" mnemonicParsing="false" onAction="#handleClientButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Join Game" textFill="WHITE">
-         <font>
-            <Font name="Fira Code Bold" size="18.0" />
-         </font></Button>
-      <TextField fx:id="textField" alignment="TOP_LEFT" layoutX="496.0" layoutY="124.0" prefHeight="29.0" prefWidth="149.0" text="rmi://localhost:1234/LocalServer" />
-      <Label layoutX="496.0" layoutY="97.0" text="Enter IP:" />
-      <Label fx:id="endGame" layoutX="496.0" layoutY="212.0" text="End Game" />
-      <Label fx:id="whoWin" layoutX="496.0" layoutY="237.0" text="You LOST!">
-         <font>
-            <Font size="25.0" />
-         </font>
-      </Label>
-      <Button fx:id="restartButton" layoutX="512.0" layoutY="286.0" mnemonicParsing="false" onAction="#HandlerestartButton" prefHeight="35.0" prefWidth="83.0" style="-fx-background-color: #26AF5F;" text="Restart" textFill="WHITE">
-         <font>
-            <Font name="Fira Code Regular" size="12.0" />
-         </font>
-      </Button>
-      <Label fx:id="connectionStatus" layoutX="594.0" layoutY="463.0" style="-fx-background-color: #26AF5F;" text="Connected" textFill="WHITE" />
-   </children>
-</AnchorPane>
+
+<BorderPane style="-fx-background-color: #34495E;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.layout.Controller">
+   <center>
+      <AnchorPane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="665.0" style="-fx-background-color: #43515E;">
+         <children>
+            <Label fx:id="endGame" layoutX="496.0" layoutY="212.0" text="Game Over" textFill="#e0ab00">
+               <font>
+                  <Font name="Fira Code Regular" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="whoWin" layoutX="496.0" layoutY="237.0" text="You LOST!" textFill="WHITE">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Button fx:id="restartButton" layoutX="519.0" layoutY="282.0" mnemonicParsing="false" onAction="#handleRestartButton" prefHeight="80.0" prefWidth="83.0" style="-fx-background-color: #26AF5F; -fx-border-radius: 40; -fx-background-radius: 80,40;" textFill="WHITE">
+               <font>
+                  <Font name="Fira Code Bold" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </center>
+   <bottom>
+      <VBox prefHeight="100.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="serverButton" mnemonicParsing="false" onAction="#handleServerButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Start Game" textFill="WHITE">
+                     <font>
+                        <Font name="Fira Code Bold" size="18.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="25.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="clientButton" mnemonicParsing="false" onAction="#handleClientButton" prefHeight="29.0" prefWidth="159.0" style="-fx-background-color: #26AF5F;" text="Join Game" textFill="WHITE">
+                     <font>
+                        <Font name="Fira Code Bold" size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Enter IP:" textFill="WHITE">
+                     <HBox.margin>
+                        <Insets right="10.0" top="5.0" />
+                     </HBox.margin>
+                     <font>
+                        <Font name="Fira Code Regular" size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="textField" alignment="TOP_LEFT" prefHeight="29.0" prefWidth="149.0" text="rmi://localhost:1234/LocalServer" />
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="connectionStatus" style="-fx-background-color: #26AF5F;" text="Connected" textFill="WHITE" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="3.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+         <BorderPane.margin>
+            <Insets top="15.0" />
+         </BorderPane.margin>
+      </VBox>
+   </bottom>
+   <top>
+      <VBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" text="Tic Tac Toe" textAlignment="CENTER" textFill="#35ff86">
+                     <font>
+                        <Font name="Fira Code Bold" size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+</BorderPane>
