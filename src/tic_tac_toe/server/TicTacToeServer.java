@@ -21,7 +21,7 @@ public class TicTacToeServer extends UnicastRemoteObject implements ClientCallba
     }
 
     public TicTacToeServer() throws RemoteException {
-        System.setSecurityManager(new SecurityManager());
+//        System.setSecurityManager(new SecurityManager());
         Registry registry = LocateRegistry.createRegistry(1234);
         registry.rebind("LocalServer", this);
     }

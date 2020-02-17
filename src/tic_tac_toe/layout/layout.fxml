@@ -5,7 +5,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
 <BorderPane style="-fx-background-color: #34495E;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tic_tac_toe.layout.Controller">
    <center>
       <AnchorPane fx:id="panel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="491.0" prefWidth="665.0" style="-fx-background-color: #43515E;">
@@ -58,7 +57,7 @@
                         <Font name="Fira Code Regular" size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textField" alignment="TOP_LEFT" prefHeight="29.0" prefWidth="149.0" text="rmi://localhost:1234/LocalServer" />
+                  <TextField fx:id="textField" alignment="TOP_LEFT" prefHeight="26.0" prefWidth="230.0" text="rmi://localhost:1234/LocalServer" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />
@@ -79,7 +78,7 @@
       </VBox>
    </bottom>
    <top>
-      <VBox BorderPane.alignment="CENTER">
+      <VBox fx:id="menuVBox" BorderPane.alignment="CENTER">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>

@@ -2,18 +2,19 @@ package tic_tac_toe.layout;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import tic_tac_toe.client.TicTacToeClient;
 import tic_tac_toe.server.TicTacToeServer;
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class Controller {
     private Label whoWin;
     @FXML
     private Label connectionStatus;
+    @FXML
+    private VBox menuVBox;
 
     private List<Rectangle> rectangles = new ArrayList<>(9);
     private List<Cell> cellList = new ArrayList<>(9);
@@ -46,12 +49,18 @@ public class Controller {
     private TicTacToeServer server = null;
     private TicTacToeClient client = null;
 
+    private Alert waitingForClient;
+
     @FXML
     public void initialize() {
+        createMenu();
         createTable();
         endGame.setVisible(false);
         whoWin.setVisible(false);
         connectionStatus.setVisible(false);
+        waitingForClient = new Alert(Alert.AlertType.INFORMATION);
+        waitingForClient.setContentText("Waiting for clients to connect!");
+        waitingForClient.initModality(Modality.APPLICATION_MODAL);
         Image restartImg = new Image("/tic_tac_toe/assets/reset-icon.png");
         restartButton.setGraphic(new ImageView(restartImg));
         restartButton.setVisible(false);
@@ -70,9 +79,6 @@ public class Controller {
                     rectangle.setDisable(true);
                     server.sendToClient(2, rectangles.indexOf(rectangle));
                     yourTurn = false;
-                }
-                if (whoWin.getText().toString().equals("DRAW!")){
-                    restartButton.setVisible(true);
                 }
                 if (checkForEndGame(1) == 1) {
                     endGame.setVisible(true);
@@ -103,8 +109,9 @@ public class Controller {
             serverButton.setDisable(true);
             textField.setDisable(true);
             yourTurn = true;
+            waitingForClient.showAndWait();
             server.setGuiCellListener(event -> {
-                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initaited
+                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initiated
                     reset();
                     return;
                 }
@@ -134,7 +141,7 @@ public class Controller {
             textField.setDisable(true);
             yourTurn = false;
             client.setGuiCellListener(event -> {
-                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initaited
+                if(event.getStatus() == 0 && event.getIndex() == -1){ // restart initiated
                     reset();
                     return;
                 }
@@ -156,6 +163,7 @@ public class Controller {
         }
     }
 
+    // Initialize the Game Table
     private void createTable() {
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 3; ++j) {
@@ -172,6 +180,54 @@ public class Controller {
         panel.getChildren().addAll(rectangles);
     }
 
+    // Create menus
+    private void createMenu(){
+        Menu help = new Menu("Help");
+        Menu file = new Menu("File");
+
+        MenuItem about = new MenuItem("About");
+        MenuItem newGame = new MenuItem("New Game");
+        MenuItem exit = new MenuItem("Exit");
+
+        file.getItems().addAll(newGame,exit);
+        help.getItems().add(about);
+
+        MenuBar menuBar = new MenuBar();
+        menuBar.getMenus().addAll(file,help);
+        menuVBox.getChildren().add(0,menuBar);
+
+        // Lambda functions for event handling
+        EventHandler<ActionEvent> newGameEvent = e -> {
+            Alert confirm = new Alert(Alert.AlertType.WARNING,"Are you sure you want to restart game?",ButtonType.OK,ButtonType.CANCEL);
+            confirm.showAndWait().ifPresent((btnType) ->{
+                if (btnType == ButtonType.OK){
+                    handleRestartButton();
+                }else confirm.close();
+            });
+        };
+
+        EventHandler<ActionEvent> quitEvent = e -> {
+            Alert confirm = new Alert(Alert.AlertType.WARNING,"Are you sure you want to quit game?",ButtonType.OK,ButtonType.CANCEL);
+            confirm.showAndWait().ifPresent((btnType) ->{
+                if (btnType == ButtonType.OK){
+                    System.exit(0);
+                }else confirm.close();
+            });
+        };
+
+        EventHandler<ActionEvent> aboutEvent = e -> {
+            Alert confirm = new Alert(Alert.AlertType.INFORMATION,"Distributed Systems(CS6001) Lab Project - \n Tic-Tac-Toe implementation using Java RMI \n\n Team Members \n 1. Addis Yohannes \n 2. Lidet Teshome \n 3. Rabra Hierpa \n 4. Yishak Mebrate",ButtonType.OK);
+            confirm.showAndWait();
+        };
+
+        if(whoWin.getText().equals("DRAW!")) newGame.setDisable(true);
+
+        newGame.setOnAction(newGameEvent);
+        exit.setOnAction(quitEvent);
+        help.setOnAction(aboutEvent);
+    }
+
+    // Check for end of game
     private int checkForEndGame(int status) {
         int counter = 0;
         for (int i = 0; i < 3; ++i) {    // vertically for O
@@ -221,7 +277,7 @@ public class Controller {
         return 0;
     }
 
-
+    // Event handler for game restart button
     @FXML
     private void handleRestartButton(){
         restartButton.setVisible(false);
@@ -235,6 +291,7 @@ public class Controller {
         }
         reset();
     }
+
     private void reset(){
         endGame.setVisible(false);
         whoWin.setVisible(false);
